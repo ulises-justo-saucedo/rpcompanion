@@ -47,9 +47,6 @@ public class DatabaseConfiguration {
     public Properties getProperties() {
         return properties;
     }
-    public void setProperties(Properties properties) {
-        this.properties = properties;
-    }
     public String getPROPERTIES_FILE_ROUTE() {
         return PROPERTIES_FILE_ROUTE;
     }

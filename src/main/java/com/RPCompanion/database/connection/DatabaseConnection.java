@@ -24,13 +24,7 @@ public class DatabaseConnection {
     public Connection getConnection() {
         return connection;
     }
-    public void setConnection(Connection connection) {
-        this.connection = connection;
-    }
     public DatabaseQuery getDatabaseQuery() {
         return databaseQuery;
-    }
-    public void setDatabaseQuery(DatabaseQuery databaseQuery) {
-        this.databaseQuery = databaseQuery;
     }
 }
