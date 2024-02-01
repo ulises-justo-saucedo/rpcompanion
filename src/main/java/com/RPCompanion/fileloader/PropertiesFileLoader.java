@@ -1,4 +1,4 @@
-package com.RPCompanion.files;
+package com.RPCompanion.fileloader;
 import com.RPCompanion.exceptions.PropertiesFileException;
 
 import java.io.FileReader;

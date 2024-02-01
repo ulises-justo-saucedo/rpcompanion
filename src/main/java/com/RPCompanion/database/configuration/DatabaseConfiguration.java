@@ -1,7 +1,7 @@
 package com.RPCompanion.database.configuration;
 import com.RPCompanion.exceptions.DatabaseAccessException;
 import com.RPCompanion.exceptions.PropertiesFileException;
-import com.RPCompanion.files.PropertiesFileLoader;
+import com.RPCompanion.fileloader.PropertiesFileLoader;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

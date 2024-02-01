@@ -3,7 +3,7 @@ package com.RPCompanion.repositories.RPCharacter;
 import com.RPCompanion.entities.RPCharacterEntity;
 import com.RPCompanion.exceptions.DatabaseAccessException;
 import com.RPCompanion.exceptions.PropertiesFileException;
-import com.RPCompanion.files.PropertiesFileLoader;
+import com.RPCompanion.fileloader.PropertiesFileLoader;
 import com.RPCompanion.repositories.AutoIncrementID;
 
 import java.sql.Connection;
