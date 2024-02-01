@@ -1,30 +1,29 @@
 package com.RPCompanion.database.connection;
 import com.RPCompanion.database.configuration.DatabaseConfiguration;
-import com.RPCompanion.database.querys.DatabaseQuery;
 import java.io.IOException;
 import java.sql.*;
+import java.util.logging.Logger;
+
 public class DatabaseConnection {
+    private final Logger logger = Logger.getLogger(DatabaseConnection.class.getName());;
     private Connection connection;
-    private DatabaseQuery databaseQuery;
     public DatabaseConnection() {
         try {
             this.connection = new DatabaseConfiguration().establishConnection();
-            this.databaseQuery = new DatabaseQuery(this.connection);
-        } catch (IOException e) {
+            logger.info("Successfully connected to '"+connection.getCatalog()+"' database.\n");
+        } catch (IOException | SQLException e) {
             throw new RuntimeException(e);
         }
     }
     public void closeConnection(){
         try {
             connection.close();
+            logger.info("Successfully closed connection to '"+connection.getCatalog()+"' database.");
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
     public Connection getConnection() {
         return connection;
-    }
-    public DatabaseQuery getDatabaseQuery() {
-        return databaseQuery;
     }
 }

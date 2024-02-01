@@ -8,7 +8,10 @@ import java.util.Properties;
 public class DatabaseConfiguration {
     private final String PROPERTIES_FILE_ROUTE = "src/main/resources/database/database.properties";
     private final String DATABASE_NAME = "rpcompanion";
-    private Properties properties;
+    private final String URL_KEY = "url";
+    private final String USERNAME_KEY = "username";
+    private final String PASSWORD_KEY = "password";
+    private final Properties properties;
     public DatabaseConfiguration() throws IOException {
         this.properties = loadDatabaseProperties();
     }
@@ -21,24 +24,29 @@ public class DatabaseConfiguration {
     }
     public Connection establishConnection(){
         try {
-            createDatabaseIfNotExists();
+            createDatabase();
             return DriverManager.getConnection(
-                    properties.getProperty("url")+DATABASE_NAME,
-                    properties.getProperty("username"),
-                    properties.getProperty("password")
+                    properties.getProperty(URL_KEY)+DATABASE_NAME,
+                    properties.getProperty(USERNAME_KEY),
+                    properties.getProperty(PASSWORD_KEY)
             );
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
-    public void createDatabaseIfNotExists(){
+    public void createDatabase() {
+        Connection temporalConnection = null;
         try {
-            Connection temporalConnection = DriverManager.getConnection(
-                    properties.getProperty("url"),
-                    properties.getProperty("username"),
-                    properties.getProperty("password")
+            temporalConnection = DriverManager.getConnection(
+                    properties.getProperty(URL_KEY),
+                    properties.getProperty(USERNAME_KEY),
+                    properties.getProperty(PASSWORD_KEY)
             );
-            temporalConnection.prepareStatement("CREATE DATABASE IF NOT EXISTS "+DATABASE_NAME).executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        new DatabaseConfigurationQuery(temporalConnection).setUpDatabase(DATABASE_NAME);
+        try {
             temporalConnection.close();
         } catch (SQLException e) {
             throw new RuntimeException(e);
