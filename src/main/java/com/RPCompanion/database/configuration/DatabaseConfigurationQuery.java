@@ -1,4 +1,6 @@
 package com.RPCompanion.database.configuration;
+import com.RPCompanion.exceptions.DatabaseAccessException;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -10,11 +12,11 @@ public class DatabaseConfigurationQuery {
     public DatabaseConfigurationQuery(Connection connection){
         this.connection = connection;
     }
-    public void setUpDatabase(String databaseName){
+    public void setUpDatabase(String databaseName) throws DatabaseAccessException {
         createDatabase(databaseName);
         createRPCharacterTable();
     }
-    private void createDatabase(String databaseName){
+    private void createDatabase(String databaseName) throws DatabaseAccessException {
         String query = "CREATE DATABASE "+databaseName;
         try(PreparedStatement ps = connection.prepareStatement(query)) {
             ps.executeUpdate();
@@ -24,7 +26,7 @@ public class DatabaseConfigurationQuery {
             try {
                 connection.setCatalog(databaseName); //Now point to the existent DB
             } catch (SQLException ex) {
-                throw new RuntimeException(ex);
+                throw new DatabaseAccessException("Couldn't access to database provided. Set catalog operation over database failed.");
             }
             logger.info("Database '"+databaseName+"' already exists. No need to create it again.\n");
         }

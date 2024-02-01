@@ -1,6 +1,7 @@
 package com.RPCompanion.repositories;
 
 import com.RPCompanion.entities.RPCharacterEntity;
+import com.RPCompanion.exceptions.DatabaseAccessException;
 import com.RPCompanion.services.RPCharacterService;
 
 import java.sql.Connection;
@@ -12,12 +13,12 @@ public class RPCharacterRepository {
     private final Logger logger = Logger.getLogger(RPCharacterRepository.class.getName());;
     private Connection connection;
     private PreparedStatement psSave;
-    public RPCharacterRepository(Connection connection){
+    public RPCharacterRepository(Connection connection) throws DatabaseAccessException {
         this.connection = connection;
         try {
             this.psSave = this.connection.prepareStatement("INSERT INTO rpcharacter VALUES(?,?,?,?,?,?,?)");
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new DatabaseAccessException("Couldn't create new PreparedStatement. Closed connection or wrong permissions can be the cause.");
         }
     }
     public void save(RPCharacterEntity rpCharacterEntity){
@@ -32,7 +33,7 @@ public class RPCharacterRepository {
             psSave.executeUpdate();
             logger.info("Successfully saved entity with ID '"+rpCharacterEntity.getId()+"'.\n");
         } catch (SQLException e) {
-            logger.warning("Entity with ID '"+rpCharacterEntity.getId()+"' already exists. No need to save it.\n");
+            logger.warning("Entity with ID '"+rpCharacterEntity.getId()+"' already exists. Save transaction failed.\n");
         }
     }
 }

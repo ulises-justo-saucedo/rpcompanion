@@ -1,4 +1,8 @@
 package com.RPCompanion.database.configuration;
+import com.RPCompanion.exceptions.DatabaseAccessException;
+import com.RPCompanion.exceptions.DatabasePropertiesFileException;
+
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.sql.Connection;
@@ -12,17 +16,19 @@ public class DatabaseConfiguration {
     private final String USERNAME_KEY = "username";
     private final String PASSWORD_KEY = "password";
     private final Properties properties;
-    public DatabaseConfiguration() throws IOException {
+    public DatabaseConfiguration() throws DatabasePropertiesFileException {
         this.properties = loadDatabaseProperties();
     }
-    public Properties loadDatabaseProperties() throws IOException {
+    public Properties loadDatabaseProperties() throws DatabasePropertiesFileException {
         Properties prop = new Properties();
         try(FileReader fr = new FileReader(PROPERTIES_FILE_ROUTE)){
             prop.load(fr);
+        } catch (IOException e) {
+            throw new DatabasePropertiesFileException("Couldn't load database properties file. Check if exists.");
         }
         return prop;
     }
-    public Connection establishConnection(){
+    public Connection establishConnection() throws DatabaseAccessException {
         try {
             createDatabase();
             return DriverManager.getConnection(
@@ -31,10 +37,10 @@ public class DatabaseConfiguration {
                     properties.getProperty(PASSWORD_KEY)
             );
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new DatabaseAccessException("Couldn't access to the database provided.");
         }
     }
-    public void createDatabase() {
+    public void createDatabase() throws DatabaseAccessException {
         Connection temporalConnection = null;
         try {
             temporalConnection = DriverManager.getConnection(
@@ -43,13 +49,13 @@ public class DatabaseConfiguration {
                     properties.getProperty(PASSWORD_KEY)
             );
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new DatabaseAccessException("Couldn't access to the database provided.");
         }
         new DatabaseConfigurationQuery(temporalConnection).setUpDatabase(DATABASE_NAME);
         try {
             temporalConnection.close();
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new DatabaseAccessException("Couldn't access to the database provided. Close operation failed.");
         }
     }
     public Properties getProperties() {

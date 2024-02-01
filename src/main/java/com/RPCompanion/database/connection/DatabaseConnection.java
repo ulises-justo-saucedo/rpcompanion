@@ -1,26 +1,31 @@
 package com.RPCompanion.database.connection;
 import com.RPCompanion.database.configuration.DatabaseConfiguration;
-import java.io.IOException;
+import com.RPCompanion.exceptions.DatabaseAccessException;
+import com.RPCompanion.exceptions.DatabasePropertiesFileException;
 import java.sql.*;
 import java.util.logging.Logger;
 
 public class DatabaseConnection {
     private final Logger logger = Logger.getLogger(DatabaseConnection.class.getName());;
     private Connection connection;
-    public DatabaseConnection() {
+    public DatabaseConnection() throws DatabasePropertiesFileException, DatabaseAccessException {
+        this.connection = new DatabaseConfiguration().establishConnection();
         try {
-            this.connection = new DatabaseConfiguration().establishConnection();
             logger.info("Successfully connected to '"+connection.getCatalog()+"' database.\n");
-        } catch (IOException | SQLException e) {
-            throw new RuntimeException(e);
+        } catch (SQLException e) {
+            throw new DatabaseAccessException("Couldn't access database provided. Get catalog operation over connection failed.");
         }
     }
-    public void closeConnection(){
+    public void closeConnection() throws DatabaseAccessException {
         try {
             connection.close();
+        } catch (SQLException e) {
+            throw new DatabaseAccessException("Couldn't access to the database provided. Close operation failed.");
+        }
+        try {
             logger.info("Successfully closed connection to '"+connection.getCatalog()+"' database.");
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new DatabaseAccessException("Couldn't access database provided. Get catalog operation over connection failed.");
         }
     }
     public Connection getConnection() {
