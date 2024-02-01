@@ -1,8 +1,6 @@
 package com.RPCompanion.database.configuration;
 import com.RPCompanion.exceptions.DatabaseAccessException;
 import com.RPCompanion.exceptions.DatabasePropertiesFileException;
-
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.sql.Connection;

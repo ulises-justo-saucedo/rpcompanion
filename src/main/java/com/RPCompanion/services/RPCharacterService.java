@@ -1,7 +1,7 @@
 package com.RPCompanion.services;
 import com.RPCompanion.entities.RPCharacterEntity;
 import com.RPCompanion.exceptions.DatabaseAccessException;
-import com.RPCompanion.repositories.RPCharacterRepository;
+import com.RPCompanion.repositories.RPCharacter.RPCharacterRepository;
 import java.sql.Connection;
 public class RPCharacterService {
     private Connection connection;
