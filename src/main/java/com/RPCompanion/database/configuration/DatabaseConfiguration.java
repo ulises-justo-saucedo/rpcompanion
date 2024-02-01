@@ -1,8 +1,8 @@
 package com.RPCompanion.database.configuration;
 import com.RPCompanion.exceptions.DatabaseAccessException;
-import com.RPCompanion.exceptions.DatabasePropertiesFileException;
-import java.io.FileReader;
-import java.io.IOException;
+import com.RPCompanion.exceptions.PropertiesFileException;
+import com.RPCompanion.files.PropertiesFileLoader;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -14,17 +14,8 @@ public class DatabaseConfiguration {
     private final String USERNAME_KEY = "username";
     private final String PASSWORD_KEY = "password";
     private final Properties properties;
-    public DatabaseConfiguration() throws DatabasePropertiesFileException {
-        this.properties = loadDatabaseProperties();
-    }
-    public Properties loadDatabaseProperties() throws DatabasePropertiesFileException {
-        Properties prop = new Properties();
-        try(FileReader fr = new FileReader(PROPERTIES_FILE_ROUTE)){
-            prop.load(fr);
-        } catch (IOException e) {
-            throw new DatabasePropertiesFileException("Couldn't load database properties file. Check if exists.");
-        }
-        return prop;
+    public DatabaseConfiguration() throws PropertiesFileException {
+        this.properties = PropertiesFileLoader.loadPropertiesFile(PROPERTIES_FILE_ROUTE);
     }
     public Connection establishConnection() throws DatabaseAccessException {
         try {
