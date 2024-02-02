@@ -1,17 +1,17 @@
 package com.RPCompanion.entities;
-import java.time.LocalDate;
+import java.sql.Date;
 public class RPCharacterEntity {
     private int id;
     private String name;
     private String surname;
-    private LocalDate birthDate;
+    private Date birthDate;
     private int age;
     private String story;
     private String aspect;
 
     public RPCharacterEntity(){}
 
-    public RPCharacterEntity(String name, String surname, LocalDate birthDate, int age, String story, String aspect) {
+    public RPCharacterEntity(String name, String surname, Date birthDate, int age, String story, String aspect) {
         this.name = name;
         this.surname = surname;
         this.birthDate = birthDate;
@@ -44,11 +44,11 @@ public class RPCharacterEntity {
         this.surname = surname;
     }
 
-    public LocalDate getBirthDate() {
+    public Date getBirthDate() {
         return birthDate;
     }
 
-    public void setBirthDate(LocalDate birthDate) {
+    public void setBirthDate(Date birthDate) {
         this.birthDate = birthDate;
     }
 
@@ -64,7 +64,7 @@ public class RPCharacterEntity {
         return story;
     }
 
-    public void setHistory(String story) {
+    public void setStory(String story) {
         this.story = story;
     }
 
@@ -74,5 +74,18 @@ public class RPCharacterEntity {
 
     public void setAspect(String aspect) {
         this.aspect = aspect;
+    }
+
+    @Override
+    public String toString() {
+        return "RPCharacterEntity{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", surname='" + surname + '\'' +
+                ", birthDate=" + birthDate +
+                ", age=" + age +
+                ", story='" + story + '\'' +
+                ", aspect='" + aspect + '\'' +
+                '}';
     }
 }
