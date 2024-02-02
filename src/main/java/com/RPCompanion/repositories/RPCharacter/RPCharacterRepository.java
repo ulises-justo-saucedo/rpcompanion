@@ -1,41 +1,28 @@
 package com.RPCompanion.repositories.RPCharacter;
-
 import com.RPCompanion.entities.RPCharacterEntity;
 import com.RPCompanion.exceptions.DatabaseAccessException;
 import com.RPCompanion.exceptions.PropertiesFileException;
 import com.RPCompanion.fileloader.PropertiesFileLoader;
 import com.RPCompanion.repositories.AutoIncrementID;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.util.Properties;
+import java.util.HashMap;
 import java.util.logging.Logger;
 
 public class RPCharacterRepository {
     private final Logger logger = Logger.getLogger(RPCharacterRepository.class.getName());
-    private final String LOCAL_QUERIES_FILE_ROUTE = "src/main/java/com/RPCompanion/repositories/RPCharacter/rpcharacter-queries.properties";
-    private final String GLOBAL_QUERIES_FILE_ROUTE = "src/main/java/com/RPCompanion/repositories/global-queries.properties";
+    private final String QUERIES_FILE_ROUTE = "src/main/resources/rpcharacter/rpcharacter-queries.properties";
     private Connection connection;
-    private Properties localQueries;
-    private Properties globalQueries;
-    private PreparedStatement psSave;
-    private PreparedStatement psGlobalQueryGetLastID;
+    private HashMap<String,PreparedStatement> queries;
     public RPCharacterRepository(Connection connection) throws DatabaseAccessException, PropertiesFileException {
         this.connection = connection;
-        this.localQueries = PropertiesFileLoader.loadPropertiesFile(LOCAL_QUERIES_FILE_ROUTE);
-        this.globalQueries = PropertiesFileLoader.loadPropertiesFile(GLOBAL_QUERIES_FILE_ROUTE);
-        try {
-            this.psSave = this.connection.prepareStatement(localQueries.getProperty("save"));
-            this.psGlobalQueryGetLastID = this.connection.prepareStatement(globalQueries.getProperty("get-last-id")+" rpcharacter");
-        } catch (SQLException e) {
-            throw new DatabaseAccessException("Couldn't create new PreparedStatement. Closed connection or wrong permissions can be the cause.");
-        }
+        this.queries = PropertiesFileLoader.loadQueries(this.connection,PropertiesFileLoader.loadPropertiesFile(QUERIES_FILE_ROUTE));
     }
-    public void save(RPCharacterEntity rpCharacterEntity){
-        try {
+    public void save(RPCharacterEntity rpCharacterEntity) throws DatabaseAccessException {
+        try(PreparedStatement psSave = queries.get("save")) {
             rpCharacterEntity.setId(calculateID());
-            psSave.setInt(1,calculateID());
+            psSave.setInt(1,rpCharacterEntity.getId());
             psSave.setString(2,rpCharacterEntity.getName());
             psSave.setString(3,rpCharacterEntity.getSurname());
             psSave.setString(4,rpCharacterEntity.getBirthDate().toString());
@@ -49,8 +36,8 @@ public class RPCharacterRepository {
         }
     }
     private int calculateID() throws DatabaseAccessException {
-        try {
-            return AutoIncrementID.calculateNextID(psGlobalQueryGetLastID.executeQuery());
+        try(PreparedStatement psLastId = queries.get("get-last-id")) {
+            return AutoIncrementID.calculateNextID(psLastId.executeQuery());
         } catch (SQLException e) {
             throw new DatabaseAccessException("SELECT transaction failed. A wrong connection, null PreparedStatement or wrong database credentials can be the cause.");
         }

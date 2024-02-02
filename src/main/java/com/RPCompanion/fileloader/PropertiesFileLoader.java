@@ -1,8 +1,14 @@
 package com.RPCompanion.fileloader;
+import com.RPCompanion.exceptions.DatabaseAccessException;
 import com.RPCompanion.exceptions.PropertiesFileException;
 
 import java.io.FileReader;
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.Properties;
 
 public class PropertiesFileLoader {
@@ -14,5 +20,18 @@ public class PropertiesFileLoader {
             throw new PropertiesFileException("Couldn't load properties file. Check if exists: "+fileRoute);
         }
         return prop;
+    }
+    public static HashMap<String, PreparedStatement> loadQueries(Connection connection, Properties queriesFile) throws DatabaseAccessException {
+        HashMap<String,PreparedStatement> queries = new HashMap<>();
+        Enumeration<Object> queriesKeys = queriesFile.keys();
+        while(queriesKeys.hasMoreElements()){
+            String key = String.valueOf(queriesKeys.nextElement());
+            try {
+                queries.put(key,connection.prepareStatement(queriesFile.getProperty(key)));
+            } catch (SQLException e) {
+                throw new DatabaseAccessException("Couldn't create new PreparedStatement. A closed connection or wrong database access can be the cause.");
+            }
+        }
+        return queries;
     }
 }

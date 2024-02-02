@@ -11,7 +11,7 @@ public class RPCharacterService {
         this.connection = connection;
         this.rpCharacterRepository = new RPCharacterRepository(this.connection);
     }
-    public void save(RPCharacterEntity rpCharacterEntity){
+    public void save(RPCharacterEntity rpCharacterEntity) throws DatabaseAccessException {
         rpCharacterRepository.save(rpCharacterEntity);
     }
 }
