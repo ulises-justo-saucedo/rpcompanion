@@ -1,9 +1,8 @@
-package com.RPCompanion.repositories.RPCharacter;
+package com.RPCompanion.repositories;
 import com.RPCompanion.entities.RPCharacterEntity;
 import com.RPCompanion.exceptions.DatabaseAccessException;
 import com.RPCompanion.exceptions.PropertiesFileException;
 import com.RPCompanion.fileloader.PropertiesFileLoader;
-import com.RPCompanion.repositories.AutoIncrementID;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -15,16 +14,14 @@ import java.util.logging.Logger;
 public class RPCharacterRepository {
     private final Logger logger = Logger.getLogger(RPCharacterRepository.class.getName());
     private final String QUERIES_FILE_ROUTE = "src/main/resources/rpcharacter/rpcharacter-queries.properties";
-    private Connection connection;
     private HashMap<String,PreparedStatement> queries;
     public RPCharacterRepository(Connection connection) throws DatabaseAccessException, PropertiesFileException {
-        this.connection = connection;
-        this.queries = PropertiesFileLoader.loadQueries(this.connection,PropertiesFileLoader.loadPropertiesFile(QUERIES_FILE_ROUTE));
+        this.queries = PropertiesFileLoader.loadQueries(connection,PropertiesFileLoader.loadPropertiesFile(QUERIES_FILE_ROUTE));
     }
     public boolean save(RPCharacterEntity rpCharacterEntity) throws DatabaseAccessException {
         boolean saved = true;
         try {
-            rpCharacterEntity.setId(calculateID());
+            rpCharacterEntity.setId(AutoIncrementID.calculateNextID(queries.get("get-last-id").executeQuery()));
             queries.get("save").setInt(1,rpCharacterEntity.getId());
             queries.get("save").setString(2,rpCharacterEntity.getName());
             queries.get("save").setString(3,rpCharacterEntity.getSurname());
@@ -79,12 +76,5 @@ public class RPCharacterRepository {
             logger.warning("Couldn't modify the entity of ID '"+rpCharacterEntity.getId()+"'.");
         }
         return modified;
-    }
-    private int calculateID() throws DatabaseAccessException {
-        try {
-            return AutoIncrementID.calculateNextID(queries.get("get-last-id").executeQuery());
-        } catch (SQLException e) {
-            throw new DatabaseAccessException("SELECT transaction failed. A wrong connection, null PreparedStatement or wrong database credentials can be the cause.");
-        }
     }
 }

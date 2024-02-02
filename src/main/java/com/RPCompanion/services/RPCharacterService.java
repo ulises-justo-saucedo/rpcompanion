@@ -2,11 +2,10 @@ package com.RPCompanion.services;
 import com.RPCompanion.entities.RPCharacterEntity;
 import com.RPCompanion.exceptions.DatabaseAccessException;
 import com.RPCompanion.exceptions.PropertiesFileException;
-import com.RPCompanion.repositories.RPCharacter.RPCharacterRepository;
+import com.RPCompanion.repositories.RPCharacterRepository;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.LocalDate;
 import java.util.logging.Logger;
 
 public class RPCharacterService {
@@ -28,9 +27,7 @@ public class RPCharacterService {
     public RPCharacterEntity selectByID(int id){
         RPCharacterEntity rpCharacterEntity = new RPCharacterEntity();
         try (ResultSet rs = rpCharacterRepository.selectByID(id)) {
-            if(!rs.isBeforeFirst() && rs.getRow() == 0){
-                logger.warning("Couldn't select entity of ID '"+id+"'. ID provided may be wrong or a database access error happened.\n");
-            }else{
+            if(rs.next()){
                 rs.next();
                 rpCharacterEntity.setId(rs.getInt(1));
                 rpCharacterEntity.setName(rs.getString(2));
@@ -40,9 +37,11 @@ public class RPCharacterService {
                 rpCharacterEntity.setStory(rs.getString(6));
                 rpCharacterEntity.setAspect(rs.getString(7));
                 logger.info("Successfully selected entity with ID '"+id+"'.\n");
+            }else{
+                logger.warning("Couldn't select entity of ID '"+id+"'. ID provided may be wrong or a database access error happened.\n");
             }
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            logger.warning("SELECT operation over RPCharacterEntity of ID '"+id+"' failed.\n");
         }
         return rpCharacterEntity;
     }

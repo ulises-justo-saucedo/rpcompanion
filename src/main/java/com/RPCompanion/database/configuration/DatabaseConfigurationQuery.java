@@ -20,7 +20,7 @@ public class DatabaseConfigurationQuery {
     }
     public void setUpDatabase(String databaseName) throws DatabaseAccessException, PropertiesFileException {
         createDatabase(databaseName);
-        createRPCharacterTable();
+        createTables();
     }
     private void createDatabase(String databaseName) throws DatabaseAccessException, PropertiesFileException {
         try(PreparedStatement ps = queries.get("create-database")) {
@@ -34,19 +34,23 @@ public class DatabaseConfigurationQuery {
                 connection.setCatalog(databaseName); //Now point to the existent DB
                 this.queries = PropertiesFileLoader.loadQueries(this.connection,PropertiesFileLoader.loadPropertiesFile(QUERIES_FILE_ROUTE)); //Since we changed our connection catalog, we need to update the connection of our queries
             } catch (SQLException ex) {
-                throw new DatabaseAccessException("Couldn't access to database provided. Set catalog operation over database failed.");
+                throw new DatabaseAccessException("Couldn't access to database provided. Set catalog operation over database failed.\n");
             }
             logger.info("Database '"+databaseName+"' already exists. No need to create it again.\n");
         } catch (PropertiesFileException e) {
-            throw new PropertiesFileException("Couldn't found queries file provided. Check if exists.");
+            throw new PropertiesFileException("Couldn't found queries file provided. Check if exists.\n");
         }
     }
-    private void createRPCharacterTable(){
-        try(PreparedStatement ps = queries.get("create-table-rpcharacter")) {
-            ps.executeUpdate();
-            logger.info("Table 'rpcharacter' created successfully.\n");
-        } catch (SQLException e) {
-            logger.info("Table 'rpcharacter' already exists. No need to create it again.\n");
+    private void createTables(){
+        for(String key : queries.keySet()){
+            if(!key.equals("create-database")){
+                try {
+                    queries.get(key).executeUpdate();
+                    logger.info("Successfully created table of '"+key+"' query.\n");
+                } catch (SQLException e) {
+                    logger.info("Table of '"+key+"' query already exists. No need to create it again.\n");
+                }
+            }
         }
     }
     private void deleteObsoleteQueriesFromMemory() throws DatabaseAccessException {
