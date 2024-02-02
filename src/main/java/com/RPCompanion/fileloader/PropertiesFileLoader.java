@@ -21,8 +21,9 @@ public class PropertiesFileLoader {
         }
         return prop;
     }
-    public static HashMap<String, PreparedStatement> loadQueries(Connection connection, Properties queriesFile) throws DatabaseAccessException {
+    public static HashMap<String, PreparedStatement> loadQueries(Connection connection, String queriesFileRoute) throws DatabaseAccessException, PropertiesFileException {
         HashMap<String,PreparedStatement> queries = new HashMap<>();
+        Properties queriesFile = loadPropertiesFile(queriesFileRoute);
         Enumeration<Object> queriesKeys = queriesFile.keys();
         while(queriesKeys.hasMoreElements()){
             String key = String.valueOf(queriesKeys.nextElement());

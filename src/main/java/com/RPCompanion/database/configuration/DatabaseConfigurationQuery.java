@@ -16,7 +16,7 @@ public class DatabaseConfigurationQuery {
     private HashMap<String,PreparedStatement> queries;
     public DatabaseConfigurationQuery(Connection connection) throws PropertiesFileException, DatabaseAccessException {
         this.connection = connection;
-        this.queries = PropertiesFileLoader.loadQueries(this.connection,PropertiesFileLoader.loadPropertiesFile(QUERIES_FILE_ROUTE));
+        this.queries = PropertiesFileLoader.loadQueries(this.connection,QUERIES_FILE_ROUTE);
     }
     public void setUpDatabase(String databaseName) throws DatabaseAccessException, PropertiesFileException {
         createDatabase(databaseName);
@@ -27,12 +27,12 @@ public class DatabaseConfigurationQuery {
             ps.executeUpdate();
             connection.setCatalog(databaseName); //Now point to the DB recently created
             deleteObsoleteQueriesFromMemory(); //We delete the queries with the old connection (the one who didn't have "databaseName" as catalog)
-            this.queries = PropertiesFileLoader.loadQueries(this.connection,PropertiesFileLoader.loadPropertiesFile(QUERIES_FILE_ROUTE)); //Since we changed our connection catalog, we need to update the connection of our queries
+            this.queries = PropertiesFileLoader.loadQueries(this.connection,QUERIES_FILE_ROUTE); //Since we changed our connection catalog, we need to update the connection of our queries
             logger.info("Database '"+databaseName+"' created successfully.\n");
         } catch (SQLException e) {
             try {
                 connection.setCatalog(databaseName); //Now point to the existent DB
-                this.queries = PropertiesFileLoader.loadQueries(this.connection,PropertiesFileLoader.loadPropertiesFile(QUERIES_FILE_ROUTE)); //Since we changed our connection catalog, we need to update the connection of our queries
+                this.queries = PropertiesFileLoader.loadQueries(this.connection,QUERIES_FILE_ROUTE); //Since we changed our connection catalog, we need to update the connection of our queries
             } catch (SQLException ex) {
                 throw new DatabaseAccessException("Couldn't access to database provided. Set catalog operation over database failed.\n");
             }

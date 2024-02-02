@@ -17,7 +17,7 @@ public class GalleryRepository {
     private final String QUERIES_FILE_ROUTE = "src/main/resources/gallery/gallery-queries.properties";
     private HashMap<String, PreparedStatement> queries;
     public GalleryRepository(Connection connection) throws PropertiesFileException, DatabaseAccessException {
-        this.queries = PropertiesFileLoader.loadQueries(connection,PropertiesFileLoader.loadPropertiesFile(QUERIES_FILE_ROUTE));
+        this.queries = PropertiesFileLoader.loadQueries(connection,QUERIES_FILE_ROUTE);
     }
     public boolean save(GalleryEntity galleryEntity){
         boolean saved = true;

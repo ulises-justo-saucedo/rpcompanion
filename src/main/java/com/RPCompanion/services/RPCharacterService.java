@@ -35,7 +35,7 @@ public class RPCharacterService {
                 rpCharacterEntity.setBirthDate(rs.getDate(4));
                 rpCharacterEntity.setAge(rs.getInt(5));
                 rpCharacterEntity.setStory(rs.getString(6));
-                rpCharacterEntity.setAspect(rs.getString(7));
+                rpCharacterEntity.setAspect(rs.getBlob(7));
                 logger.info("Successfully selected entity with ID '"+id+"'.\n");
             }else{
                 logger.warning("Couldn't select entity of ID '"+id+"'. ID provided may be wrong or a database access error happened.\n");

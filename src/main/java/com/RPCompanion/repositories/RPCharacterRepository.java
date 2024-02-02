@@ -16,7 +16,7 @@ public class RPCharacterRepository {
     private final String QUERIES_FILE_ROUTE = "src/main/resources/rpcharacter/rpcharacter-queries.properties";
     private HashMap<String,PreparedStatement> queries;
     public RPCharacterRepository(Connection connection) throws DatabaseAccessException, PropertiesFileException {
-        this.queries = PropertiesFileLoader.loadQueries(connection,PropertiesFileLoader.loadPropertiesFile(QUERIES_FILE_ROUTE));
+        this.queries = PropertiesFileLoader.loadQueries(connection,QUERIES_FILE_ROUTE);
     }
     public boolean save(RPCharacterEntity rpCharacterEntity) throws DatabaseAccessException {
         boolean saved = true;
@@ -28,7 +28,7 @@ public class RPCharacterRepository {
             queries.get("save").setString(4,rpCharacterEntity.getBirthDate().toString());
             queries.get("save").setInt(5,rpCharacterEntity.getAge());
             queries.get("save").setString(6,rpCharacterEntity.getStory());
-            queries.get("save").setString(7,rpCharacterEntity.getAspect());
+            queries.get("save").setBlob(7,rpCharacterEntity.getAspect());
             queries.get("save").executeUpdate();
             logger.info("Successfully saved entity with ID '"+rpCharacterEntity.getId()+"'.\n");
         } catch (SQLException e) {
@@ -67,7 +67,7 @@ public class RPCharacterRepository {
             queries.get("modify-by-id").setDate(3,rpCharacterEntity.getBirthDate());
             queries.get("modify-by-id").setInt(4,rpCharacterEntity.getAge());
             queries.get("modify-by-id").setString(5,rpCharacterEntity.getStory());
-            queries.get("modify-by-id").setString(6,rpCharacterEntity.getAspect());
+            queries.get("modify-by-id").setBlob(6,rpCharacterEntity.getAspect());
             queries.get("modify-by-id").setInt(7,rpCharacterEntity.getId());
             queries.get("modify-by-id").executeUpdate();
             logger.info("Successfully modified entity of ID '"+rpCharacterEntity.getId()+"'.");

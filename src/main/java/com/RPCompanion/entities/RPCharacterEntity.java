@@ -1,4 +1,5 @@
 package com.RPCompanion.entities;
+import java.sql.Blob;
 import java.sql.Date;
 public class RPCharacterEntity {
     private int id;
@@ -7,11 +8,11 @@ public class RPCharacterEntity {
     private Date birthDate;
     private int age;
     private String story;
-    private String aspect;
+    private Blob aspect;
 
     public RPCharacterEntity(){}
 
-    public RPCharacterEntity(String name, String surname, Date birthDate, int age, String story, String aspect) {
+    public RPCharacterEntity(String name, String surname, Date birthDate, int age, String story, Blob aspect) {
         this.name = name;
         this.surname = surname;
         this.birthDate = birthDate;
@@ -68,11 +69,11 @@ public class RPCharacterEntity {
         this.story = story;
     }
 
-    public String getAspect() {
+    public Blob getAspect() {
         return aspect;
     }
 
-    public void setAspect(String aspect) {
+    public void setAspect(Blob aspect) {
         this.aspect = aspect;
     }
 
