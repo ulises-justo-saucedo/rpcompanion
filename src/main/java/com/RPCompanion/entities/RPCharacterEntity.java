@@ -6,17 +6,17 @@ public class RPCharacterEntity {
     private String surname;
     private LocalDate birthDate;
     private int age;
-    private String history;
+    private String story;
     private String aspect;
 
     public RPCharacterEntity(){}
 
-    public RPCharacterEntity(String name, String surname, LocalDate birthDate, int age, String history, String aspect) {
+    public RPCharacterEntity(String name, String surname, LocalDate birthDate, int age, String story, String aspect) {
         this.name = name;
         this.surname = surname;
         this.birthDate = birthDate;
         this.age = age;
-        this.history = history;
+        this.story = story;
         this.aspect = aspect;
     }
 
@@ -60,12 +60,12 @@ public class RPCharacterEntity {
         this.age = age;
     }
 
-    public String getHistory() {
-        return history;
+    public String getStory() {
+        return story;
     }
 
-    public void setHistory(String history) {
-        this.history = history;
+    public void setHistory(String story) {
+        this.story = story;
     }
 
     public String getAspect() {

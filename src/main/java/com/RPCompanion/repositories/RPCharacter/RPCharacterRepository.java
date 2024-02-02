@@ -27,7 +27,7 @@ public class RPCharacterRepository {
             psSave.setString(3,rpCharacterEntity.getSurname());
             psSave.setString(4,rpCharacterEntity.getBirthDate().toString());
             psSave.setInt(5,rpCharacterEntity.getAge());
-            psSave.setString(6,rpCharacterEntity.getHistory());
+            psSave.setString(6,rpCharacterEntity.getStory());
             psSave.setString(7,rpCharacterEntity.getAspect());
             psSave.executeUpdate();
             logger.info("Successfully saved entity with ID '"+rpCharacterEntity.getId()+"'.\n");
