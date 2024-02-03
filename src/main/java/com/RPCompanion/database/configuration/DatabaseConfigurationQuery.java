@@ -23,8 +23,8 @@ public class DatabaseConfigurationQuery {
         createTables();
     }
     private void createDatabase(String databaseName) throws DatabaseAccessException, PropertiesFileException {
-        try(PreparedStatement ps = queries.get("create-database")) {
-            ps.executeUpdate();
+        try {
+            queries.get("create-database").executeUpdate();
             connection.setCatalog(databaseName); //Now point to the DB recently created
             deleteObsoleteQueriesFromMemory(); //We delete the queries with the old connection (the one who didn't have "databaseName" as catalog)
             this.queries = PropertiesFileLoader.loadQueries(this.connection,QUERIES_FILE_ROUTE); //Since we changed our connection catalog, we need to update the connection of our queries
@@ -34,11 +34,9 @@ public class DatabaseConfigurationQuery {
                 connection.setCatalog(databaseName); //Now point to the existent DB
                 this.queries = PropertiesFileLoader.loadQueries(this.connection,QUERIES_FILE_ROUTE); //Since we changed our connection catalog, we need to update the connection of our queries
             } catch (SQLException ex) {
-                throw new DatabaseAccessException("Couldn't access to database provided. Set catalog operation over database failed.\n");
+                throw new DatabaseAccessException("Set catalog operation over database failed.\n"+e.getLocalizedMessage());
             }
             logger.info("Database '"+databaseName+"' already exists. No need to create it again.\n");
-        } catch (PropertiesFileException e) {
-            throw new PropertiesFileException("Couldn't found queries file provided. Check if exists.\n");
         }
     }
     private void createTables(){
@@ -58,7 +56,7 @@ public class DatabaseConfigurationQuery {
             try {
                 ps.close();
             } catch (SQLException e) {
-                throw new DatabaseAccessException("Couldn't close the old PreparedStatement.");
+                throw new DatabaseAccessException("Couldn't close the old PreparedStatement.\n"+e.getLocalizedMessage());
             }
         }
     }

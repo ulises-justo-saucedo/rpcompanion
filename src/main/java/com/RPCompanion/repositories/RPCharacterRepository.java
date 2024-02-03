@@ -30,9 +30,9 @@ public class RPCharacterRepository {
             queries.get("save").setString(6,rpCharacterEntity.getStory());
             queries.get("save").setBlob(7,rpCharacterEntity.getAspect());
             queries.get("save").executeUpdate();
-            logger.info("Successfully saved entity with ID '"+rpCharacterEntity.getId()+"'.\n");
+            logger.info("Successfully performed 'Save' transaction over RPCharacterEntity of ID '"+rpCharacterEntity.getId()+"'.\n");
         } catch (SQLException e) {
-            logger.warning("Entity with ID '"+rpCharacterEntity.getId()+"' already exists. Save transaction failed.\n");
+            logger.warning("'Save' transaction over RPCharacterEntity of ID '"+rpCharacterEntity.getId()+"' failed.\n"+e.getLocalizedMessage()+"\n");
             saved = false;
         }
         return saved;
@@ -42,9 +42,9 @@ public class RPCharacterRepository {
         try {
             queries.get("delete-by-id").setInt(1,id);
             queries.get("delete-by-id").executeUpdate();
-            logger.info("Successfully deleted entity with ID '"+id+"'.\n");
+            logger.info("Successfully performed 'Delete' transaction over RPCharacterEntity of ID '"+id+"'.\n");
         } catch (SQLException e) {
-            logger.warning("Couldn't delete entity of ID '"+id+"'. ID provided may be wrong or a database access error happened.\n");
+            logger.warning("'Delete' transaction over RPCharacterEntity of ID '"+id+"' failed.\n"+e.getLocalizedMessage()+"\n");
             deleted = false;
         }
         return deleted;
@@ -55,7 +55,7 @@ public class RPCharacterRepository {
             queries.get("select-by-id").setInt(1,id);
             rs = queries.get("select-by-id").executeQuery();
         } catch (SQLException e) {
-            logger.warning("Couldn't select entity of ID '"+id+"'. ID provided may be wrong or a database access error happened.\n");
+            logger.warning("'Select' transaction over RPCharacterEntity of ID '"+id+"' failed.\n"+e.getLocalizedMessage()+"\n");
         }
         return rs;
     }
@@ -70,10 +70,10 @@ public class RPCharacterRepository {
             queries.get("modify-by-id").setBlob(6,rpCharacterEntity.getAspect());
             queries.get("modify-by-id").setInt(7,rpCharacterEntity.getId());
             queries.get("modify-by-id").executeUpdate();
-            logger.info("Successfully modified entity of ID '"+rpCharacterEntity.getId()+"'.");
+            logger.info("Successfully performed 'Modify' transaction over RPCharacterEntity of ID '"+rpCharacterEntity.getId()+"'.\n");
         } catch (SQLException e) {
             modified = false;
-            logger.warning("Couldn't modify the entity of ID '"+rpCharacterEntity.getId()+"'.");
+            logger.warning("'Modify' transaction over RPCharacterEntity of ID '"+rpCharacterEntity.getId()+"' failed.\n"+e.getLocalizedMessage()+"\n");
         }
         return modified;
     }

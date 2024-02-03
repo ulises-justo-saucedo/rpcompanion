@@ -44,4 +44,15 @@ public class PowerEntity {
     public void setDescription(String description) {
         this.description = description;
     }
+
+    @Override
+    public String toString() {
+        return "PowerEntity{" +
+                "id=" + id +
+                ", rpCharacterId=" + rpCharacterId +
+                ", name='" + name + '\'' +
+                ", image=" + image +
+                ", description='" + description + '\'' +
+                '}';
+    }
 }

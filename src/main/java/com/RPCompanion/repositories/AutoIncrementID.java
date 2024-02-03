@@ -12,7 +12,7 @@ public class AutoIncrementID {
             resultSet.next();
             return resultSet.getInt(1) + 1;
         } catch (SQLException e) {
-            throw new DatabaseAccessException("Couldn't get next ID. A wrong database access or a closed ResultSet can be the cause.");
+            throw new DatabaseAccessException("Calculate next ID operation failed.\n"+e.getLocalizedMessage());
         }
     }
 }

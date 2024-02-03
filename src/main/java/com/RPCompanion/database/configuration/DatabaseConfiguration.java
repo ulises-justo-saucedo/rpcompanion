@@ -7,6 +7,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Properties;
+
 public class DatabaseConfiguration {
     private final String PROPERTIES_FILE_ROUTE = "src/main/resources/database/database.properties";
     private final String URL_KEY = "url";
@@ -26,7 +27,7 @@ public class DatabaseConfiguration {
                     properties.getProperty(PASSWORD_KEY)
             );
         } catch (SQLException e) {
-            throw new DatabaseAccessException("Couldn't access to the database provided.");
+            throw new DatabaseAccessException("Couldn't access to the database provided.\n"+e.getLocalizedMessage());
         }
     }
     public void createDatabase() throws DatabaseAccessException, PropertiesFileException {
@@ -38,13 +39,13 @@ public class DatabaseConfiguration {
                     properties.getProperty(PASSWORD_KEY)
             );
         } catch (SQLException e) {
-            throw new DatabaseAccessException("Couldn't access to the database provided.");
+            throw new DatabaseAccessException("Couldn't access to the database provided.\n"+e.getLocalizedMessage());
         }
         new DatabaseConfigurationQuery(temporalConnection).setUpDatabase(properties.getProperty(DATABASE_NAME_KEY));
         try {
             temporalConnection.close();
         } catch (SQLException e) {
-            throw new DatabaseAccessException("Couldn't access to the database provided. Close operation failed.");
+            throw new DatabaseAccessException("Close operation failed.\n"+e.getLocalizedMessage());
         }
     }
     public Properties getProperties() {

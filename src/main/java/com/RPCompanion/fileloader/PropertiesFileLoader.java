@@ -30,7 +30,7 @@ public class PropertiesFileLoader {
             try {
                 queries.put(key,connection.prepareStatement(queriesFile.getProperty(key)));
             } catch (SQLException e) {
-                throw new DatabaseAccessException("Couldn't create new PreparedStatement. A closed connection or wrong database access can be the cause.");
+                throw new DatabaseAccessException("Load queries operation failed.\n"+e.getLocalizedMessage());
             }
         }
         return queries;

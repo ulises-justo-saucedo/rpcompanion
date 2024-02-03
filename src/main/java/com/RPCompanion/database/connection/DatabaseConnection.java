@@ -14,19 +14,19 @@ public class DatabaseConnection {
         try {
             logger.info("Successfully connected to '"+connection.getCatalog()+"' database.\n");
         } catch (SQLException e) {
-            throw new DatabaseAccessException("Couldn't access database provided. Get catalog operation over connection failed.");
+            throw new DatabaseAccessException("Get catalog operation over connection failed."+e.getLocalizedMessage());
         }
     }
     public void closeConnection() throws DatabaseAccessException {
         try {
             connection.close();
         } catch (SQLException e) {
-            throw new DatabaseAccessException("Couldn't access to the database provided. Close operation failed.");
+            throw new DatabaseAccessException("Close operation failed.\n"+e.getLocalizedMessage());
         }
         try {
             logger.info("Successfully closed connection to '"+connection.getCatalog()+"' database.");
         } catch (SQLException e) {
-            throw new DatabaseAccessException("Couldn't access database provided. Get catalog operation over connection failed.");
+            throw new DatabaseAccessException("Get catalog operation over connection failed.\n"+e.getLocalizedMessage());
         }
     }
     public Connection getConnection() {

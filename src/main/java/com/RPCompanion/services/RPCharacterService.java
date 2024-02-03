@@ -28,7 +28,6 @@ public class RPCharacterService {
         RPCharacterEntity rpCharacterEntity = new RPCharacterEntity();
         try (ResultSet rs = rpCharacterRepository.selectByID(id)) {
             if(rs.next()){
-                rs.next();
                 rpCharacterEntity.setId(rs.getInt(1));
                 rpCharacterEntity.setName(rs.getString(2));
                 rpCharacterEntity.setSurname(rs.getString(3));
@@ -36,12 +35,12 @@ public class RPCharacterService {
                 rpCharacterEntity.setAge(rs.getInt(5));
                 rpCharacterEntity.setStory(rs.getString(6));
                 rpCharacterEntity.setAspect(rs.getBlob(7));
-                logger.info("Successfully selected entity with ID '"+id+"'.\n");
+                logger.info("Successfully performed 'Select' transaction over RPCharacterEntity of ID '"+id+"'.\n");
             }else{
-                logger.warning("Couldn't select entity of ID '"+id+"'. ID provided may be wrong or a database access error happened.\n");
+                logger.warning("'Select' transaction over RPCharacterEntity of ID '"+id+"' failed. No entity with such ID exists.\n");
             }
         } catch (SQLException e) {
-            logger.warning("SELECT operation over RPCharacterEntity of ID '"+id+"' failed.\n");
+            logger.warning("'Select' transaction over RPCharacterEntity of ID '"+id+"' failed.\n"+e.getLocalizedMessage()+"\n");
         }
         return rpCharacterEntity;
     }

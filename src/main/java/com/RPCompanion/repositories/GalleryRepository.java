@@ -27,20 +27,20 @@ public class GalleryRepository {
             queries.get("save").setInt(2,galleryEntity.getRpCharacterId());
             queries.get("save").setBlob(3,galleryEntity.getImage());
             queries.get("save").executeUpdate();
-            logger.info("Successfully saved GalleryEntity of ID '"+galleryEntity.getId()+"'.\n");
+            logger.info("Successfully performed 'Save' transaction over GalleryEntity of ID '"+galleryEntity.getId()+"'.\n");
         } catch (SQLException e) {
-            logger.warning("Couldn't save GalleryEntity of ID '"+galleryEntity.getId()+"'.\n"+e.getLocalizedMessage());
+            logger.warning("'Save' transaction over GalleryEntity of ID '"+galleryEntity.getId()+"' failed.\n"+e.getLocalizedMessage()+"\n");
             saved = false;
         }
         return saved;
     }
-    public ResultSet selectByID(int id) throws DatabaseAccessException {
+    public ResultSet selectByID(int id) {
         ResultSet rs = null;
         try {
             queries.get("select-by-id").setInt(1,id);
             rs = queries.get("select-by-id").executeQuery();
         } catch (SQLException e) {
-            throw new DatabaseAccessException("SELECT operation failed. Database access failed.\n");
+            logger.warning("'Select' transaction over GalleryEntity of ID '"+id+"' failed.\n"+e.getLocalizedMessage()+"\n");
         }
         return rs;
     }
@@ -49,9 +49,9 @@ public class GalleryRepository {
         try {
             queries.get("delete-by-id").setInt(1,id);
             queries.get("delete-by-id").executeUpdate();
-            logger.info("Successfully performed DELETE operation over GalleryEntity of ID '"+id+"'.\n");
+            logger.info("Successfully performed 'Delete' operation over GalleryEntity of ID '"+id+"'.\n");
         } catch (SQLException e) {
-            logger.warning("DELETE operation over GalleryEntity of ID '"+id+"' failed. ID provided may not exists.\n");
+            logger.warning("'Delete' transaction over GalleryEntity of ID '"+id+"' failed.\n"+e.getLocalizedMessage()+"\n");
             deleted = false;
         }
         return deleted;
@@ -62,9 +62,9 @@ public class GalleryRepository {
             queries.get("modify-by-id").setBlob(1,galleryEntity.getImage());
             queries.get("modify-by-id").setInt(2,galleryEntity.getId());
             queries.get("modify-by-id").executeUpdate();
-            logger.info("Successfully made UPDATE operation over GalleryEntity of ID '"+galleryEntity.getId()+"'.\n");
+            logger.info("Successfully performed 'Modify' transaction over GalleryEntity of ID '"+galleryEntity.getId()+"'.\n");
         } catch (SQLException e) {
-            logger.warning("UPDATE operation over GalleryEntity of ID '"+galleryEntity.getId()+"' failed.\n"+e);
+            logger.warning("'Modify' transaction over GalleryEntity of ID '"+galleryEntity.getId()+"' failed.\n"+e.getLocalizedMessage()+"\n");
             modified = false;
         }
         return modified;

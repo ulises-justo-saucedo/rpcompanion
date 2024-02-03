@@ -28,16 +28,19 @@ public class PowerService {
                 powerEntity.setName(rs.getString(3));
                 powerEntity.setImage(rs.getBlob(4));
                 powerEntity.setDescription(rs.getString(5));
-                logger.info("Succesfully performed SELECT transaction over PowerEntity of ID '"+id+"'.\n");
+                logger.info("Succesfully performed 'Select' transaction over PowerEntity of ID '"+id+"'.\n");
             }else{
-                logger.warning("No PowerEntity register avaible with ID '"+id+"'.\n");
+                logger.warning("'Select' transaction over PowerEntity of ID '"+id+"' failed. No entity with such ID exists.\n");
             }
         } catch (SQLException e) {
-            logger.warning("SELECT transaction over PowerEntity of ID '"+id+"' failed.\n");
+            logger.warning("'Select' transaction over PowerEntity of ID '"+id+"' failed.\n"+e.getLocalizedMessage()+"\n");
         }
         return powerEntity;
     }
     public boolean deleteByID(int id){
         return powerRepository.deleteByID(id);
+    }
+    public boolean modifyByID(PowerEntity powerEntity){
+        return powerRepository.modifyByID(powerEntity);
     }
 }

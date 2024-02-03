@@ -29,9 +29,9 @@ public class PowerRepository {
             queries.get("save").setBlob(4,powerEntity.getImage());
             queries.get("save").setString(5,powerEntity.getDescription());
             queries.get("save").executeUpdate();
-            logger.info("Successfully saved PowerEntity of ID '"+powerEntity.getId()+"'.\n");
+            logger.info("Successfully performed 'Save' transaction over PowerEntity of ID '"+powerEntity.getId()+"'.\n");
         } catch (SQLException e) {
-            logger.warning("Failed INSERT operation over PowerEntity of ID '"+powerEntity.getId()+"'.\n");
+            logger.warning("'Save' transaction over PowerEntity of ID '"+powerEntity.getId()+"' failed.\n"+e.getLocalizedMessage()+"\n");
             saved = false;
         }
         return saved;
@@ -42,7 +42,7 @@ public class PowerRepository {
             queries.get("select-by-id").setInt(1,id);
             rs = queries.get("select-by-id").executeQuery();
         } catch (SQLException e) {
-            logger.warning("SELECT transaction over PowerEntity of ID '"+id+"' failed.\n");
+            logger.warning("'Select' transaction over PowerEntity of ID '"+id+"' failed.\n"+e.getLocalizedMessage()+"\n");
         }
         return rs;
     }
@@ -51,9 +51,9 @@ public class PowerRepository {
         try {
             queries.get("delete-by-id").setInt(1,id);
             queries.get("delete-by-id").executeUpdate();
-            logger.info("Successfully performed DELETE transaction over PowerEntity of ID '"+id+"'.\n");
+            logger.info("Successfully performed 'Delete' transaction over PowerEntity of ID '"+id+"'.\n");
         } catch (SQLException e) {
-            logger.warning("DELETE transaction failed over PowerEntity of ID '"+id+"'.\n");
+            logger.warning("'Delete' transaction over PowerEntity of ID '"+id+"' failed.\n"+e.getLocalizedMessage()+"\n");
             deleted = false;
         }
         return deleted;
@@ -64,10 +64,11 @@ public class PowerRepository {
             queries.get("modify-by-id").setString(1,powerEntity.getName());
             queries.get("modify-by-id").setBlob(2,powerEntity.getImage());
             queries.get("modify-by-id").setString(3,powerEntity.getDescription());
+            queries.get("modify-by-id").setInt(4,powerEntity.getId());
             queries.get("modify-by-id").executeUpdate();
-            logger.info("Successfully performed UPDATE transaction over PowerEntity of ID '"+powerEntity.getId()+"'.\n");
+            logger.info("Successfully performed 'Modify' transaction over PowerEntity of ID '"+powerEntity.getId()+"'.\n");
         } catch (SQLException e) {
-            logger.info("UPDATE transaction over PowerEntity of ID '"+powerEntity.getId()+"' failed.\n");
+            logger.info("'Modify' transaction over PowerEntity of ID '"+powerEntity.getId()+"' failed.\n"+e.getLocalizedMessage()+"\n");
             modified = false;
         }
         return modified;

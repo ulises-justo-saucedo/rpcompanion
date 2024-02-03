@@ -26,12 +26,12 @@ public class GalleryService {
                 galleryEntity.setId(rs.getInt(1));
                 galleryEntity.setRpCharacterId(rs.getInt(2));
                 galleryEntity.setImage(rs.getBlob(3));
-                logger.info("Successfully selected GalleryEntity of ID '"+id+"'.\n");
+                logger.info("Successfully performed 'Select' transaction over GalleryEntity of ID '"+id+"'.\n");
             }else{
-                logger.warning("SELECT operation over GalleryEntity of ID '"+id+"' failed. No entity with such ID exists.\n");
+                logger.warning("'Select' transaction over GalleryEntity of ID '"+id+"' failed. No entity with such ID exists.\n");
             }
         } catch (SQLException e) {
-            logger.warning("SELECT operation over GalleryEntity of ID '"+id+"' failed.\n");
+            logger.warning("'Select' transaction over GalleryEntity of ID '"+id+"' failed.\n"+e.getLocalizedMessage()+"\n");
         }
         return galleryEntity;
     }
