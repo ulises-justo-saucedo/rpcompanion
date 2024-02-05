@@ -34,11 +34,11 @@ public class CreateRPCharacterMenu {
         this.panels = ComponentFactory.instantiatePanels(EnumMethods.getEnumNames(Panel.values()));
         this.labels = ComponentFactory.instantiateLabels(EnumMethods.getEnumNames(Label.values()));
         this.buttons = ComponentFactory.instantiateButtons(EnumMethods.getEnumNames(Button.values()));
+        panels.get(Panel.FORMULARY.name()).setLayout(new BoxLayout(panels.get(Panel.FORMULARY.name()),BoxLayout.Y_AXIS));
         panels.get(Panel.BUTTONS.name()).setLayout(new GridLayout());
     }
     public void configurePanels(){
         PanelConfigurer.setBackgroundColor(panels, Colors.TWITCH_PURPLE);
-        panels.get(Panel.FORMULARY.name()).setLayout(new BoxLayout(panels.get(Panel.FORMULARY.name()),BoxLayout.X_AXIS));
     }
     public void configureLabels(){
         labels.get(Label.TITLE.name()).setText("Creating new OC!");
@@ -48,7 +48,7 @@ public class CreateRPCharacterMenu {
         labels.get(Label.AGE.name()).setText("Age:");
         labels.get(Label.STORY.name()).setText("Story:");
         labels.get(Label.ASPECT.name()).setText("Aspect:");
-        LabelConfigurer.setFont(labels,12);
+        LabelConfigurer.setFont(labels,28);
         LabelConfigurer.setTextColor(labels,Colors.CUSTOM_WHITE);
         labels.get(Label.TITLE.name()).setFont(Fonts.personalizedFont(96));
     }
@@ -59,9 +59,9 @@ public class CreateRPCharacterMenu {
         buttons.get(Button.CANCEL.name()).addActionListener(CreateRPCharacterMenuEvents.cancelButton(WINDOW));
     }
     public void addComponentsToPanels(){
-        panels.get(Panel.TITLE.name()).add(labels.get(Label.TITLE.name()));
         PanelConfigurer.addLabelsToPanel(panels.get(Panel.FORMULARY.name()),labels);
         PanelConfigurer.addButtonsToPanel(panels.get(Panel.BUTTONS.name()),buttons);
+        panels.get(Panel.TITLE.name()).add(labels.get(Label.TITLE.name()));
         container.setLayout(new BorderLayout());
         container.add(BorderLayout.NORTH,panels.get(Panel.TITLE.name()));
         container.add(BorderLayout.CENTER,panels.get(Panel.FORMULARY.name()));
