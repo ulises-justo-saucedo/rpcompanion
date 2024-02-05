@@ -1,5 +1,5 @@
 package com.RPCompanion;
-import com.RPCompanion.ui.menu.MainMenu;
+import com.RPCompanion.ui.menu.mainmenu.MainMenu;
 import com.RPCompanion.ui.window.Window;
 public class App {
     public static void main(String[] args) {

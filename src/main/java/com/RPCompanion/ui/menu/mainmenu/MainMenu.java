@@ -1,9 +1,9 @@
-package com.RPCompanion.ui.menu;
+package com.RPCompanion.ui.menu.mainmenu;
 import com.RPCompanion.ui.EnumMethods;
 import com.RPCompanion.ui.configurer.*;
-import com.RPCompanion.ui.factory.ButtonFactory;
-import com.RPCompanion.ui.factory.LabelFactory;
-import com.RPCompanion.ui.factory.PanelFactory;
+import com.RPCompanion.ui.factory.ComponentFactory;
+import com.RPCompanion.ui.menu.createrpcharactermenu.CreateRPCharacterMenu;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -36,12 +36,13 @@ public class MainMenu {
         addLabelsAndButtonsToPanels();
     }
     private void initializeComponents(){
-        this.panels = PanelFactory.instantiatePanels(EnumMethods.getEnumNames(Panel.values()));
-        this.labels = LabelFactory.instantiateLabels(EnumMethods.getEnumNames(Label.values()));
-        this.buttons = ButtonFactory.instantiateButtons(EnumMethods.getEnumNames(Button.values()));
+        this.panels = ComponentFactory.instantiatePanels(EnumMethods.getEnumNames(Panel.values()));
+        this.labels = ComponentFactory.instantiateLabels(EnumMethods.getEnumNames(Label.values()));
+        this.buttons = ComponentFactory.instantiateButtons(EnumMethods.getEnumNames(Button.values()));
     }
     private void configurePanels(){
         PanelConfigurer.setBackgroundColor(panels, Colors.TWITCH_PURPLE);
+        panels.get(Panel.BUTTONS.name()).setLayout(new GridLayout());
     }
     private void configureLabels(){
         labels.get(Label.TITLE.name()).setText("Welcome to RPCompanion!");
@@ -59,23 +60,16 @@ public class MainMenu {
         buttons.get(Button.CREATE.name()).setText("Create new OC");
         buttons.get(Button.VIEW.name()).setText("View your OC's");
         ButtonConfigurer.setFont(buttons, 24);
-        buttons.get(Button.CREATE.name()).addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                WINDOW.showMenu("rpCharacterMenu");
-                WINDOW.repaint();
-                WINDOW.revalidate();
-            }
-        });
+        buttons.get(Button.CREATE.name()).addActionListener(MainMenuEvents.createCharacterButton(WINDOW));
     }
     private void addLabelsAndButtonsToPanels(){
         panels.get(Panel.TITLE.name()).add(labels.get(Label.TITLE.name()));
         panels.get(Panel.CONTENT.name()).add(labels.get(Label.CONTENT.name()));
-        panels.get(Panel.BUTTONS.name()).setLayout(new GridLayout());
         PanelConfigurer.addButtonsToPanel(panels.get(Panel.BUTTONS.name()),buttons);
-        container.add(panels.get(Panel.TITLE.name()));
-        container.add(panels.get(Panel.CONTENT.name()));
-        container.add(panels.get(Panel.BUTTONS.name()));
+        container.setLayout(new BorderLayout());
+        container.add(BorderLayout.NORTH,panels.get(Panel.TITLE.name()));
+        container.add(BorderLayout.CENTER,panels.get(Panel.CONTENT.name()));
+        container.add(BorderLayout.SOUTH,panels.get(Panel.BUTTONS.name()));
         WINDOW.addMenu(container,"mainMenu");
         WINDOW.showMenu("mainMenu");
     }
