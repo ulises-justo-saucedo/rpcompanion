@@ -18,9 +18,6 @@ public class Window extends JFrame {
         add(this.mainContainer);
         this.mainContainer.setLayout(this.cardLayout);
     }
-    public void configureMainPanel(){
-
-    }
     public void display(){
         setVisible(true);
     }

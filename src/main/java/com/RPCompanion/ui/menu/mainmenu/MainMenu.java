@@ -1,4 +1,6 @@
 package com.RPCompanion.ui.menu.mainmenu;
+import com.RPCompanion.exceptions.DatabaseAccessException;
+import com.RPCompanion.exceptions.PropertiesFileException;
 import com.RPCompanion.ui.EnumMethods;
 import com.RPCompanion.ui.configurer.*;
 import com.RPCompanion.ui.factory.ComponentFactory;
@@ -8,6 +10,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.Connection;
 import java.util.HashMap;
 public class MainMenu {
     private final com.RPCompanion.ui.window.Window WINDOW;
@@ -25,10 +28,10 @@ public class MainMenu {
     private enum Button{
         CREATE, VIEW
     }
-    public MainMenu(com.RPCompanion.ui.window.Window window){
+    public MainMenu(com.RPCompanion.ui.window.Window window, Connection c) throws PropertiesFileException, DatabaseAccessException {
         this.WINDOW = window;
         this.container = new JPanel();
-        new CreateRPCharacterMenu(WINDOW);
+        new CreateRPCharacterMenu(WINDOW,c);
         initializeComponents();
         configurePanels();
         configureLabels();

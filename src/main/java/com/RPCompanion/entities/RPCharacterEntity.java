@@ -11,7 +11,6 @@ public class RPCharacterEntity {
     private Blob aspect;
 
     public RPCharacterEntity(){}
-
     public RPCharacterEntity(String name, String surname, Date birthDate, int age, String story, Blob aspect) {
         this.name = name;
         this.surname = surname;
@@ -20,7 +19,13 @@ public class RPCharacterEntity {
         this.story = story;
         this.aspect = aspect;
     }
-
+    public RPCharacterEntity(String name, String surname, Date birthDate, int age, Blob aspect) {
+        this.name = name;
+        this.surname = surname;
+        this.birthDate = birthDate;
+        this.age = age;
+        this.aspect = aspect;
+    }
     public int getId() {
         return id;
     }

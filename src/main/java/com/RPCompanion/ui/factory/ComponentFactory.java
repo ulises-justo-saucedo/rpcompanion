@@ -25,4 +25,11 @@ public class ComponentFactory {
         }
         return panels;
     }
+    public static HashMap<String, JTextField> instantiateTextFields(String[] keys){
+        HashMap<String, JTextField> textFields = new HashMap<>();
+        for(String key : keys){
+            textFields.put(key,new JTextField());
+        }
+        return textFields;
+    }
 }
