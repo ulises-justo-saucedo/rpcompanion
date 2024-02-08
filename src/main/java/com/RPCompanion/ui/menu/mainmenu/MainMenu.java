@@ -3,7 +3,9 @@ import com.RPCompanion.exceptions.DatabaseAccessException;
 import com.RPCompanion.exceptions.PropertiesFileException;
 import com.RPCompanion.services.RPCharacterService;
 import com.RPCompanion.ui.EnumMethods;
+import com.RPCompanion.ui.constants.MenuNames;
 import com.RPCompanion.ui.configurer.*;
+import com.RPCompanion.ui.constants.Routes;
 import com.RPCompanion.ui.factory.ComponentFactory;
 import com.RPCompanion.ui.menu.createrpcharactermenu.CreateRPCharacterMenu;
 import com.RPCompanion.ui.menu.viewocsmenu.ViewOCsMenu;
@@ -14,7 +16,6 @@ import java.sql.Connection;
 import java.util.HashMap;
 public class MainMenu {
     private final com.RPCompanion.ui.window.Window WINDOW;
-    //private final String IMAGE_LOGO_ROUTE = "logo's not finished yet";
     private JPanel container;
     private HashMap<String, JPanel> panels;
     private enum Panel{
@@ -37,7 +38,7 @@ public class MainMenu {
         this.rpCharacterService = rpCharacterService;
         this.mainMenuEvents = new MainMenuEvents(rpCharacterService);
         new CreateRPCharacterMenu(WINDOW,c,rpCharacterService);
-        this.viewOCsMenu = new ViewOCsMenu(WINDOW,c);
+        this.viewOCsMenu = new ViewOCsMenu(WINDOW,c,rpCharacterService);
         initializeComponents();
         configurePanels();
         configureLabels();
@@ -56,8 +57,8 @@ public class MainMenu {
     private void configureLabels(){
         labels.get(Label.TITLE.name()).setText("Welcome to RPCompanion!");
         labels.get(Label.CONTENT.name()).setText("Your personal place to store your RP OC's!");
-        //Image scaledImage = new ImageIcon(IMAGE_LOGO_ROUTE).getImage().getScaledInstance(650,500,Image.SCALE_DEFAULT);
-        //labels.get(Label.CONTENT.name()).setIcon(new ImageIcon(scaledImage));
+        Image scaledImage = new ImageIcon(Routes.IMAGE_LOGO_ROUTE).getImage().getScaledInstance(650,500,Image.SCALE_DEFAULT);
+        labels.get(Label.CONTENT.name()).setIcon(new ImageIcon(scaledImage));
         labels.get(Label.CONTENT.name()).setHorizontalTextPosition(SwingConstants.CENTER);
         labels.get(Label.CONTENT.name()).setVerticalTextPosition(SwingConstants.CENTER);
         labels.get(Label.CONTENT.name()).setVerticalTextPosition(SwingConstants.TOP);
@@ -80,7 +81,7 @@ public class MainMenu {
         container.add(BorderLayout.NORTH,panels.get(Panel.TITLE.name()));
         container.add(BorderLayout.CENTER,panels.get(Panel.CONTENT.name()));
         container.add(BorderLayout.SOUTH,panels.get(Panel.BUTTONS.name()));
-        WINDOW.addMenu(container,"mainMenu");
-        WINDOW.showMenu("mainMenu");
+        WINDOW.addMenu(container, MenuNames.MAIN_MENU_NAME);
+        WINDOW.showMenu(MenuNames.MAIN_MENU_NAME);
     }
 }

@@ -1,6 +1,7 @@
 package com.RPCompanion.ui.menu.mainmenu;
 
 import com.RPCompanion.services.RPCharacterService;
+import com.RPCompanion.ui.constants.MenuNames;
 import com.RPCompanion.ui.menu.viewocsmenu.ViewOCsMenu;
 import com.RPCompanion.ui.window.Window;
 
@@ -16,7 +17,7 @@ public class MainMenuEvents {
         return new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                window.showMenu("rpCharacterMenu");
+                window.showMenu(MenuNames.RP_CHARACTER_MENU_NAME);
                 window.repaint();
                 window.revalidate();
             }
@@ -27,7 +28,7 @@ public class MainMenuEvents {
             @Override
             public void actionPerformed(ActionEvent e) {
                 viewOCsMenu.prepareViewOCsMenu(rpCharacterService.countRegisters(),rpCharacterService.selectAll());
-                window.showMenu("viewOCsMenu");
+                window.showMenu(MenuNames.VIEW_OCS_MENU_NAME);
                 window.repaint();
                 window.revalidate();
             }

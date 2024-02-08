@@ -1,7 +1,9 @@
 package com.RPCompanion.ui.menu.viewocsmenu;
 import com.RPCompanion.converters.BlobConverter;
 import com.RPCompanion.entities.RPCharacterEntity;
+import com.RPCompanion.services.RPCharacterService;
 import com.RPCompanion.ui.configurer.*;
+import com.RPCompanion.ui.constants.MenuNames;
 import com.RPCompanion.ui.window.Window;
 import javax.swing.*;
 import java.awt.*;
@@ -25,8 +27,10 @@ public class ViewOCsMenu {
     private JPanel mainMenuButtonContainer;
     private JButton mainMenuButton;
     private int characters;
-    public ViewOCsMenu(Window window, Connection c){
+    private ViewOCsMenuEvents viewOCsMenuEvents;
+    public ViewOCsMenu(Window window, Connection c, RPCharacterService rpCharacterService){
         this.WINDOW = window;
+        this.viewOCsMenuEvents = new ViewOCsMenuEvents(rpCharacterService);
         this.charactersContainer = new ArrayList<>();
         this.charactersImageAndName = new ArrayList<>();
         this.myButtons = new ArrayList<>();
@@ -40,13 +44,13 @@ public class ViewOCsMenu {
         setCharacters(characters);
         clearLists();
         clearMainContainerPanel();
-        initializeLists();
+        initializeLists(rpCharacterEntities);
         fillLists(rpCharacterEntities);
         PanelConfigurer.setBackgroundColor(charactersContainer, Colors.TWITCH_PURPLE);
         LabelConfigurer.setFont(charactersImageAndName,24);
         ButtonConfigurer.setFont(myButtons,18,BUTTONS_FOR_EACH_PANEL);
 
-        mainMenuButton.addActionListener(ViewOCsMenuEvents.mainMenuButton(WINDOW));
+        mainMenuButton.addActionListener(viewOCsMenuEvents.mainMenuButton(WINDOW));
         mainMenuButton.setFont(Fonts.personalizedFont(20));
 
         mainContainer.setLayout(new GridLayout(0,1));
@@ -65,10 +69,7 @@ public class ViewOCsMenu {
         card.add(BorderLayout.CENTER,mainContainerScroller);
         card.add(BorderLayout.SOUTH,mainMenuButtonContainer);
 
-        /*if(WINDOW.containsComponent("viewOCsMenu") != null){
-            WINDOW.remove(WINDOW.containsComponent("viewOCsMenu"));
-        }*/
-        WINDOW.addMenu(card,"viewOCsMenu");
+        WINDOW.addMenu(card, MenuNames.VIEW_OCS_MENU_NAME);
     }
     public void setCharacters(int characters){
         this.characters = characters;
@@ -81,15 +82,24 @@ public class ViewOCsMenu {
     public void clearMainContainerPanel(){
         mainContainer.removeAll();
     }
-    public void initializeLists(){
-        for(int i = 0 ; i < characters ; i++){
+    public void initializeLists(List<RPCharacterEntity> characterEntities){
+        for(int i = 0 ; i < characterEntities.size() ; i++){
             charactersContainer.add(new JPanel());
             charactersImageAndName.add(new JLabel());
             List<JButton> buttons = new ArrayList<>();
-            buttons.add(new JButton(BUTTON_SEE_CHARACTER));
-            buttons.add(new JButton(BUTTON_WRITE_STORY));
-            buttons.add(new JButton(BUTTON_MODIFY_CHARACTER));
-            buttons.add(new JButton(BUTTON_DELETE_CHARACTER));
+
+            JButton btnSeeCharacter = new JButton(BUTTON_SEE_CHARACTER);
+            JButton btnWriteStory = new JButton(BUTTON_WRITE_STORY);
+            JButton btnModifyCharacter = new JButton(BUTTON_MODIFY_CHARACTER);
+            JButton btnDeleteCharacter = new JButton(BUTTON_DELETE_CHARACTER);
+
+            btnDeleteCharacter.addActionListener(viewOCsMenuEvents.deleteCharacterButton(characterEntities.get(i).getId(),this,WINDOW));
+
+            buttons.add(btnSeeCharacter);
+            buttons.add(btnWriteStory);
+            buttons.add(btnModifyCharacter);
+            buttons.add(btnDeleteCharacter);
+
             myButtons.add(buttons);
         }
     }

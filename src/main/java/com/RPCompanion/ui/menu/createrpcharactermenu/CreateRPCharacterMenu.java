@@ -4,6 +4,7 @@ import com.RPCompanion.exceptions.PropertiesFileException;
 import com.RPCompanion.services.RPCharacterService;
 import com.RPCompanion.ui.EnumMethods;
 import com.RPCompanion.ui.configurer.*;
+import com.RPCompanion.ui.constants.MenuNames;
 import com.RPCompanion.ui.factory.ComponentFactory;
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -41,7 +42,7 @@ public class CreateRPCharacterMenu {
         this.WINDOW = window;
         this.container = new JPanel();
         this.rpCharacterService = rpCharacterService;
-        this.createRPCharacterMenuEvents = new CreateRPCharacterMenuEvents(c,rpCharacterService);
+        this.createRPCharacterMenuEvents = new CreateRPCharacterMenuEvents(rpCharacterService);
         initializeComponents();
         initializeSpinners();
         initializeFileChooser();
@@ -89,7 +90,7 @@ public class CreateRPCharacterMenu {
         buttons.get(Button.CHOOSE_IMAGE.name()).setText("Choose image");
         ButtonConfigurer.setFont(buttons,24);
         buttons.get(Button.CHOOSE_IMAGE.name()).addActionListener(createRPCharacterMenuEvents.chooseImageButton(WINDOW,jFileChooser,labels.get(Label.IMAGE.name())));
-        buttons.get(Button.CREATE.name()).addActionListener(createRPCharacterMenuEvents.createButton(WINDOW,textFields.get(TextField.NAME.name()),textFields.get(TextField.SURNAME.name()),birthdateSpinner,ageSpinner,jFileChooser));
+        buttons.get(Button.CREATE.name()).addActionListener(createRPCharacterMenuEvents.createButton(WINDOW,textFields.get(TextField.NAME.name()),textFields.get(TextField.SURNAME.name()),birthdateSpinner,ageSpinner,jFileChooser,labels.get(Label.IMAGE.name())));
         buttons.get(Button.CANCEL.name()).addActionListener(createRPCharacterMenuEvents.cancelButton(WINDOW));
     }
     public void addComponentsToPanels(){
@@ -111,6 +112,6 @@ public class CreateRPCharacterMenu {
         container.add(BorderLayout.WEST,panels.get(Panel.FORMULARY.name()));
         container.add(BorderLayout.CENTER,panels.get(Panel.IMAGE.name()));
         container.add(BorderLayout.SOUTH,panels.get(Panel.BUTTONS.name()));
-        WINDOW.addMenu(container,"rpCharacterMenu");
+        WINDOW.addMenu(container, MenuNames.RP_CHARACTER_MENU_NAME);
     }
 }

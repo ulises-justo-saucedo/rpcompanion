@@ -5,7 +5,9 @@ import com.RPCompanion.entities.RPCharacterEntity;
 import com.RPCompanion.exceptions.DatabaseAccessException;
 import com.RPCompanion.exceptions.PropertiesFileException;
 import com.RPCompanion.services.RPCharacterService;
+import com.RPCompanion.ui.constants.MenuNames;
 import com.RPCompanion.ui.configurer.ImageConfigurer;
+import com.RPCompanion.ui.constants.Routes;
 import com.RPCompanion.ui.window.Window;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -16,20 +18,20 @@ import java.sql.Connection;
 
 public class CreateRPCharacterMenuEvents {
     private RPCharacterService rpCharacterService;
-    public CreateRPCharacterMenuEvents(Connection c,RPCharacterService rpCharacterService) throws PropertiesFileException, DatabaseAccessException {
+    public CreateRPCharacterMenuEvents(RPCharacterService rpCharacterService) throws PropertiesFileException, DatabaseAccessException {
         this.rpCharacterService = rpCharacterService;
     }
     public ActionListener cancelButton(Window window){
         return new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                window.showMenu("mainMenu");
+                window.showMenu(MenuNames.MAIN_MENU_NAME);
                 window.repaint();
                 window.revalidate();
             }
         };
     }
-    public ActionListener createButton(Window window,JTextField nameField,JTextField surnameField,JSpinner birthDateField,JSpinner ageField,JFileChooser aspectField){
+    public ActionListener createButton(Window window,JTextField nameField,JTextField surnameField,JSpinner birthDateField,JSpinner ageField,JFileChooser aspectField,JLabel imagePreview){
         return new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -46,9 +48,10 @@ public class CreateRPCharacterMenuEvents {
                 surnameField.setText("");
                 birthDateField.setValue(new java.util.Date());
                 ageField.setValue(0);
-                aspectField.setSelectedFile(new File(""));
+                aspectField.setSelectedFile(new File(Routes.IMAGE_LOGO_ROUTE));
+                imagePreview.setIcon(ImageConfigurer.resizeImage(new ImageIcon(Routes.IMAGE_LOGO_ROUTE).getImage(),256,256));
 
-                window.showMenu("mainMenu");
+                window.showMenu(MenuNames.MAIN_MENU_NAME);
                 window.repaint();
                 window.revalidate();
             }
