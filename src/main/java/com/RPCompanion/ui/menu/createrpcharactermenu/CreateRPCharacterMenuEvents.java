@@ -1,31 +1,23 @@
 package com.RPCompanion.ui.menu.createrpcharactermenu;
 
-import com.RPCompanion.database.connection.DatabaseConnection;
+import com.RPCompanion.converters.ImageConverter;
 import com.RPCompanion.entities.RPCharacterEntity;
 import com.RPCompanion.exceptions.DatabaseAccessException;
 import com.RPCompanion.exceptions.PropertiesFileException;
 import com.RPCompanion.services.RPCharacterService;
+import com.RPCompanion.ui.configurer.ImageConfigurer;
 import com.RPCompanion.ui.window.Window;
-
-import javax.sql.rowset.serial.SerialBlob;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
-import java.sql.Blob;
 import java.sql.Connection;
-import java.sql.Date;
-import java.sql.SQLException;
 
 public class CreateRPCharacterMenuEvents {
     private RPCharacterService rpCharacterService;
-    public CreateRPCharacterMenuEvents(Connection c) throws PropertiesFileException, DatabaseAccessException {
-        this.rpCharacterService = new RPCharacterService(c);
+    public CreateRPCharacterMenuEvents(Connection c,RPCharacterService rpCharacterService) throws PropertiesFileException, DatabaseAccessException {
+        this.rpCharacterService = rpCharacterService;
     }
     public ActionListener cancelButton(Window window){
         return new ActionListener() {
@@ -41,14 +33,7 @@ public class CreateRPCharacterMenuEvents {
         return new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Blob aspect = null;
-                try {
-                    //Convert user's image to bytes in order to insert it in the database
-                    aspect = new SerialBlob(Files.readAllBytes(Path.of(aspectField.getSelectedFile().getAbsolutePath())));
-                } catch (SQLException | IOException ex) {
-                    throw new RuntimeException(ex);
-                }
-                RPCharacterEntity character = new RPCharacterEntity(nameField.getText(),surnameField.getText(),new java.sql.Date(((java.util.Date)birthDateField.getValue()).getTime()),(int) ageField.getValue(),aspect);
+                RPCharacterEntity character = new RPCharacterEntity(nameField.getText(),surnameField.getText(),new java.sql.Date(((java.util.Date)birthDateField.getValue()).getTime()),(int) ageField.getValue(), ImageConverter.convertImageToBlob(Path.of(aspectField.getSelectedFile().getAbsolutePath())));
                 try {
                     //This shouldn't fail. But it forces me to add the try/catch block
                     rpCharacterService.save(character);
@@ -76,7 +61,7 @@ public class CreateRPCharacterMenuEvents {
                 int input = jFileChooser.showOpenDialog(window);
                 switch(input){
                     case JFileChooser.APPROVE_OPTION:
-                        imagePreview.setIcon(new ImageIcon(jFileChooser.getSelectedFile().getAbsolutePath()));
+                        imagePreview.setIcon(ImageConfigurer.resizeImage(new ImageIcon(jFileChooser.getSelectedFile().getAbsolutePath()).getImage(),256,256));
                         break;
                     case JFileChooser.CANCEL_OPTION:
                         break;

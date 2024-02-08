@@ -77,4 +77,19 @@ public class RPCharacterRepository {
         }
         return modified;
     }
+    public ResultSet countRegisters(){
+        try {
+            return queries.get("get-last-id").executeQuery();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public ResultSet selectAll(){
+        try {
+            return queries.get("select-all").executeQuery();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

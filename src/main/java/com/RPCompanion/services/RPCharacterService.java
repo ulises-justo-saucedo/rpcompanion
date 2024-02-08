@@ -3,9 +3,15 @@ import com.RPCompanion.entities.RPCharacterEntity;
 import com.RPCompanion.exceptions.DatabaseAccessException;
 import com.RPCompanion.exceptions.PropertiesFileException;
 import com.RPCompanion.repositories.RPCharacterRepository;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+
+import javax.sql.rowset.serial.SerialBlob;
+import javax.swing.*;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Logger;
 
 public class RPCharacterService {
@@ -28,13 +34,7 @@ public class RPCharacterService {
         RPCharacterEntity rpCharacterEntity = new RPCharacterEntity();
         try (ResultSet rs = rpCharacterRepository.selectByID(id)) {
             if(rs.next()){
-                rpCharacterEntity.setId(rs.getInt(1));
-                rpCharacterEntity.setName(rs.getString(2));
-                rpCharacterEntity.setSurname(rs.getString(3));
-                rpCharacterEntity.setBirthDate(rs.getDate(4));
-                rpCharacterEntity.setAge(rs.getInt(5));
-                rpCharacterEntity.setStory(rs.getString(6));
-                rpCharacterEntity.setAspect(rs.getBlob(7));
+                rpCharacterEntity = mapRPCharacterEntity(rs);
                 logger.info("Successfully performed 'Select' transaction over RPCharacterEntity of ID '"+id+"'.\n");
             }else{
                 logger.warning("'Select' transaction over RPCharacterEntity of ID '"+id+"' failed. No entity with such ID exists.\n");
@@ -49,4 +49,39 @@ public class RPCharacterService {
         return rpCharacterRepository.modifyByID(rpCharacterEntity);
     }
 
+    public int countRegisters(){
+        try (ResultSet rs = rpCharacterRepository.countRegisters()) {
+            rs.next();
+            return rs.getInt(1);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public List<RPCharacterEntity> selectAll(){
+        List<RPCharacterEntity> characterEntities = new ArrayList<>();
+        try(ResultSet rs = rpCharacterRepository.selectAll()){
+            while(rs.next()){
+                characterEntities.add(mapRPCharacterEntity(rs));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return characterEntities;
+    }
+    private RPCharacterEntity mapRPCharacterEntity(ResultSet rs){
+        RPCharacterEntity rpCharacterEntity = new RPCharacterEntity();
+        try {
+            rpCharacterEntity.setId(rs.getInt(1));
+            rpCharacterEntity.setName(rs.getString(2));
+            rpCharacterEntity.setSurname(rs.getString(3));
+            rpCharacterEntity.setBirthDate(rs.getDate(4));
+            rpCharacterEntity.setAge(rs.getInt(5));
+            rpCharacterEntity.setStory(rs.getString(6));
+            rpCharacterEntity.setAspect(rs.getBlob(7));
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return rpCharacterEntity;
+    }
 }

@@ -1,13 +1,13 @@
 package com.RPCompanion.ui.menu.createrpcharactermenu;
 import com.RPCompanion.exceptions.DatabaseAccessException;
 import com.RPCompanion.exceptions.PropertiesFileException;
+import com.RPCompanion.services.RPCharacterService;
 import com.RPCompanion.ui.EnumMethods;
 import com.RPCompanion.ui.configurer.*;
 import com.RPCompanion.ui.factory.ComponentFactory;
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
-import java.io.File;
 import java.sql.Connection;
 import java.util.Calendar;
 import java.util.Date;
@@ -36,10 +36,12 @@ public class CreateRPCharacterMenu {
     private JSpinner birthdateSpinner;
     private JSpinner ageSpinner;
     private CreateRPCharacterMenuEvents createRPCharacterMenuEvents;
-    public CreateRPCharacterMenu(com.RPCompanion.ui.window.Window window,Connection c) throws PropertiesFileException, DatabaseAccessException {
+    private RPCharacterService rpCharacterService;
+    public CreateRPCharacterMenu(com.RPCompanion.ui.window.Window window, Connection c,RPCharacterService rpCharacterService) throws PropertiesFileException, DatabaseAccessException {
         this.WINDOW = window;
         this.container = new JPanel();
-        this.createRPCharacterMenuEvents = new CreateRPCharacterMenuEvents(c);
+        this.rpCharacterService = rpCharacterService;
+        this.createRPCharacterMenuEvents = new CreateRPCharacterMenuEvents(c,rpCharacterService);
         initializeComponents();
         initializeSpinners();
         initializeFileChooser();

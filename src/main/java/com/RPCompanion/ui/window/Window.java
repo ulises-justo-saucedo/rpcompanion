@@ -27,4 +27,16 @@ public class Window extends JFrame {
     public void showMenu(String menuName){
         cardLayout.show(mainContainer,menuName);
     }
+    public JPanel getMainContainer(){
+        return this.mainContainer;
+    }
+    public Component containsComponent(String componentName){
+        Component[] components = getComponents();
+        int i = 0;
+        Component found = null;
+        while(components.length > i && found == null){
+            if(components[i].getName().equals(componentName)) found = components[i];
+        }
+        return found;
+    }
 }
