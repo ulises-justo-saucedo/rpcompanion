@@ -23,5 +23,3 @@ to your MySQL credentials. This is needed so the application can stablish a conn
 RPCompanion lets you store your own made OC's, letting you the posibility to save this information of your OC: Aspect (A visual representation of your OC. JPEG, JPG or PNG file),
 name, surname, date of birth and age.
 It's an easy place to save your favorite OC's.
-RPCompanion makes use of JDBC in order to perform transactional operations. So, the database, tables, queries and mapping of DB registers to Java objects it's made from the ground,
-without the use of any ORM such as Hibernate.
