@@ -8,7 +8,13 @@ RPCompanion is built with:
 - JDBC
 
 ## RPCompanion workflow  
-Creation of the database -> Creation of database tables -> Stablish connection with database -> Show UI built in Swing -> Receive and process request made from the UI.  
+
+1. Creation of the database.
+2. Creation of database tables.
+3. Stablish connection with database.
+4. Show UI built in Swing.
+5. Receive and process request made from the UI.  
+
 Some of mentioned steps are optional. If RPCompanion detects that the database or the corresponding tables are already created, it doesn't try to delete and create them again. Instead, just ignores those steps and just stablish the connection.  
 Since with JDBC you have to build everything from the ground, the connection, queries, repositories, services and mapping of Java objects is made from zero.  
 Queries are stored in a separated file, which repositories read and execute them if needed. So in the repository layer RPCompanion just executes those queries and returns the corresponding ResultSet.  
